@@ -20,7 +20,7 @@ def get_reading(config):
 
     # Sensor details
     #sensor = str(config['sensor_settings']['sensor'])
-    sensor = Adafruit_DHT.DHT11
+    sensor = Adafruit_DHT.DHT22
     sensor_gpio = config['sensor_settings']['sensor_gpio_pin']
     measurement = config['sensor_settings']['measurement']
     location = config['sensor_settings']['location']
@@ -68,7 +68,7 @@ def post_alert(config, trigger, value):
     ifttt_event_url = ifttt_url.format(trigger) + ifttt_key
 
     # Post it!
-    requests.post(ifttt_event_url, json=data)
+    #requests.post(ifttt_event_url, json=data)
 
 
 def read_config():
