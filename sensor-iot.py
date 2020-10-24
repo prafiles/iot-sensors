@@ -40,7 +40,7 @@ def get_reading(config):
     dew_point = celcius - ((100 - humidity) / 5)
 
     #Heat Index
-    heat_index = − 42.379 + (2.04901523 * farhenheit) + (10.14333127 * humidity) − (0.22475541 * farhenheit * humidity) − (6.83783*(10**−3)*farhenheit**2) − (5.481717 * (10**−2) * humidity**2) + (1.22874 * (10**−3) * farhenheit**2 * humidity) + (8.5282*(10**−4) * farhenheit * humidity**2) − (1.99*(10**−6) * farhenheit**2 * humidity**2)
+    heat_index = - 42.379 + (2.04901523 * farhenheit) + (10.14333127 * humidity) - (0.22475541 * farhenheit * humidity) - (6.83783*(10**-3)*farhenheit**2) - (5.481717 * (10**-2) * humidity**2) + (1.22874 * (10**-3) * farhenheit**2 * humidity) + (8.5282*(10**-4) * farhenheit * humidity**2) - (1.99*(10**-6) * farhenheit**2 * humidity**2)
 
     # Structure the data for write
     data = [
