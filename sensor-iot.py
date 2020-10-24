@@ -26,6 +26,8 @@ def get_reading(config):
     location = config['sensor_settings']['location']
 
     humidity, celcius = Adafruit_DHT.read_retry(sensor, sensor_gpio)
+    if humidity > 100 or humidity < 0 :
+        print ("Humidity is abnormal, possibly an err code : " +  humidity)
     # Add Farhenheit for us 'Mericans
     farhenheit = celcius * 9 / 5 + 32
 
