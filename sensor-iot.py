@@ -28,12 +28,19 @@ def get_reading(config):
     humidity, celcius = Adafruit_DHT.read_retry(sensor, sensor_gpio)
     if humidity > 100 or humidity < 0 :
         print ("Humidity is abnormal, possibly an err code : " +  humidity)
+        
     # Add Farhenheit for us 'Mericans
     farhenheit = celcius * 9 / 5 + 32
 
     # Structure Timestamp to UTC
     current_time = time.gmtime()
     timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', current_time)
+
+    #Dew Point
+    dew_point = celcius - ((100 - humidity) / 5)
+
+    #Heat Index
+    heat_index = − 42.379 + (2.04901523 * farhenheit) + (10.14333127 * humidity) − (0.22475541 * farhenheit * humidity) − (6.83783*(10**−3)*farhenheit**2) − (5.481717 × 10**−2 × humidity**2) + (1.22874 × 10**−3 × farhenheit**2 × humidity) + (8.5282×10**−4 × farhenheit × humidity**2) − (1.99×10**−6 × farhenheit**2 × humidity**2)
 
     # Structure the data for write
     data = [
@@ -46,7 +53,9 @@ def get_reading(config):
             "fields": {
                 "temperature_c": celcius,
                 "temperature_f": farhenheit,
-                "humidity": humidity
+                "humidity": humidity,
+                "dew_point": dew_point,
+                "heat_index": heat_index
             }
         }
     ]
@@ -55,22 +64,7 @@ def get_reading(config):
     client.write_points(data)
 
     # Return the temperature value.
-    return float(data[0]['fields']['temperature_f'])
-
-
-def post_alert(config, trigger, value):
-    # IFTTT Webhook Info
-    ifttt_url = "https://maker.ifttt.com/trigger/{}/with/key/"
-    ifttt_key = config['alerting_settings']['ifttt_key']
-
-    # 'value' will be sent to IFTTT and can be included in alert
-    data = {"value1": value}
-
-    # Pass in event name to trigger appropriately
-    ifttt_event_url = ifttt_url.format(trigger) + ifttt_key
-
-    # Post it!
-    #requests.post(ifttt_event_url, json=data)
+    return data
 
 
 def read_config():
@@ -96,21 +90,6 @@ def main():
     while True:
         # Get the reading and send to Influx
         current_temperature = get_reading(config)
-
-        # If temp is higher than threshold, Append to counter
-        if current_temperature > float(config['alerting_settings']['temperature_threshold_high']) or current_temperature < float(config['alerting_settings']['temperature_threshold_low']):
-            threshold_counter.append(current_temperature)
-
-        # If we hit threshold_count, alert and reset.
-        # This prevents us from alerting every temperature check
-        if len(threshold_counter) == int(config['alerting_settings']['threshold_count']):
-            temperature_alert = config['alerting_settings']['ifttt_event_name']
-            post_alert(config, temperature_alert, current_temperature)
-            # Reset counter
-            threshold_counter = []
-        # Sleep the interval
-        time.sleep(int(config['influxdb_settings']['interval']))
-
 
 if __name__ == '__main__':
     main()
