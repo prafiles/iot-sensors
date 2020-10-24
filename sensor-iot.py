@@ -55,7 +55,8 @@ def get_reading(config):
                 "temperature_f": farhenheit,
                 "humidity": humidity,
                 "dew_point": dew_point,
-                "heat_index": heat_index
+                "heat_index_f": heat_index,
+                "heat_index_c": (heat_index - 32) * 5/9 
             }
         }
     ]
