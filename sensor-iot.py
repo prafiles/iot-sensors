@@ -91,5 +91,8 @@ def main():
         # Get the reading and send to Influx
         current_temperature = get_reading(config)
 
+        # Loop Complete - Sleep for 10 seconds
+        time.sleep(5)
+
 if __name__ == '__main__':
     main()
