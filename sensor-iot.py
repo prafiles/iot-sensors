@@ -28,6 +28,7 @@ def get_reading(config):
     humidity, celcius = Adafruit_DHT.read_retry(sensor, sensor_gpio)
     if humidity is None:
         print ("Humidity is null, possibly an err code.")
+        return
     if humidity > 100 or humidity < 0 :
         print ("Humidity is abnormal, possibly an err code : " +  humidity)
         return
