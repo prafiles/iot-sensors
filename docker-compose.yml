@@ -1,0 +1,23 @@
+influxdb:
+  image: influxdb:latest
+  container_name: influxdb
+  ports:
+    - "8083:8083"
+    - "8086:8086"
+  environment:
+    - INFLUXDB_ADMIN_ENABLED=true
+    - INFLUXDB_USER=${INFLUX_USERNAME}
+    - INFLUXDB_USER_PASSWORD=${INFLUX_PASSWORD}
+  volumes:
+    - "influxdb:/var/lib/influxdb"
+  restart: always
+
+grafana:
+  image: grafana/grafana:latest
+  container_name: grafana
+  ports:
+    - "127.0.0.1:3000:3000"
+  links:
+    - influxdb
+  volumes:
+    - "grafana:/var/lib/grafana"
