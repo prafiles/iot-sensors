@@ -109,7 +109,17 @@ def main():
             direction = event.direction # , event.action
 
         if direction == "up":
-            sense.show_message(str(round(reading.fields.temperature_c, 2)) + " C")
+            sense.show_message(str(round(reading["fields"]["temperature_c"], 2)) + " C")
+        elif direction == "down":
+            sense.show_message(str(round(reading["fields"]["humidity"], 2)) + " %")
+        elif direction == "right":
+            sense.show_message(str(round(reading["fields"]["pressure"], 2)) + " mBar")
+        elif direction == "left":
+            sense.show_message(
+                str(round(reading["fields"]["x"], 2)) + " " +
+                str(round(reading["fields"]["y"], 2)) + " " +
+                str(round(reading["fields"]["z"], 2)) + " "
+            )
 
 
         # Loop Complete - Sleep for 10 seconds
