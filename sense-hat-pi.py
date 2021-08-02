@@ -24,7 +24,7 @@ def get_reading(config):
     # Create the InfluxDB client object
     client = InfluxDBClient(host, port, user, password, dbname)
 
-    humidity = sense.get_temperature()
+    humidity = sense.get_humidity()
     pressure = sense.get_pressure()
 
     if humidity is None:
@@ -34,7 +34,7 @@ def get_reading(config):
         print ("Humidity is abnormal, possibly an err code : " +  humidity)
         return
 
-    celcius = sense.get_humidity()
+    celcius = sense.get_temperature()
         
     # Add Farhenheit for us 'Mericans
     farhenheit = celcius * 9 / 5 + 32
