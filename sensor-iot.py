@@ -1,5 +1,4 @@
 import time
-import requests
 import configparser
 import Adafruit_DHT
 from influxdb import InfluxDBClient
