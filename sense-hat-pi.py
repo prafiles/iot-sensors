@@ -118,7 +118,8 @@ def main():
             now = datetime.now()
             sense.show_message(now.strftime("%d/%m/%Y %H:%M:%S"))
         elif direction == "right":
-            sense.show_message("RIGHT")
+            direction = None
+            sense.show_message("Screen Disabled")
         elif direction == "left":
             sense.show_message(
                 str(round(reading["fields"]["x"], 2)) + " " +
