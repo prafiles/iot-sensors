@@ -2,6 +2,7 @@ import time
 import configparser
 from sense_hat import SenseHat
 from influxdb import InfluxDBClient
+from datetime import datetime
 
 # Configuration File
 CONFIG_FILE = "settings.conf"
@@ -99,21 +100,25 @@ def main():
     # Read the config
     config = read_config()
 
+    direction = None
+
     while True:
         # Get the reading and send to Influx
         reading = get_reading(config)[0]
-
-        direction = None
         
         for event in sense.stick.get_events():
             direction = event.direction # , event.action
 
         if direction == "up":
-            sense.show_message(str(round(reading["fields"]["temperature_c"], 2)) + " C")
+            sense.show_message(str(round(reading["fields"]["temperature_c"], 2)) + " C "
+                + str(round(reading["fields"]["humidity"], 2)) + " % " +
+                str(round(reading["fields"]["pressure"], 2)) + " mBar"
+            )
         elif direction == "down":
-            sense.show_message(str(round(reading["fields"]["humidity"], 2)) + " %")
+            now = datetime.now()
+            sense.show_message(now = datetime.now())
         elif direction == "right":
-            sense.show_message(str(round(reading["fields"]["pressure"], 2)) + " mBar")
+            sense.show_message("RIGHT")
         elif direction == "left":
             sense.show_message(
                 str(round(reading["fields"]["x"], 2)) + " " +
@@ -123,7 +128,7 @@ def main():
 
 
         # Loop Complete - Sleep for 10 seconds
-        time.sleep(5)
+        time.sleep(15)
 
 if __name__ == '__main__':
     main()
