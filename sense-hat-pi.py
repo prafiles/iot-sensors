@@ -116,7 +116,7 @@ def main():
             )
         elif direction == "down":
             now = datetime.now()
-            sense.show_message(now = datetime.now())
+            sense.show_message(now.strftime("%d/%m/%Y %H:%M:%S"))
         elif direction == "right":
             sense.show_message("RIGHT")
         elif direction == "left":
