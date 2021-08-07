@@ -116,7 +116,7 @@ def main():
             )
         elif direction == "down":
             now = datetime.now()
-            sense.show_message(now.strftime("%d/%m/%Y %H:%M:%S"))
+            sense.show_message(now.strftime("%H:%M:"))
         elif direction == "right":
             direction = None
             sense.show_message("Screen Disabled")
