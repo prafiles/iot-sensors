@@ -103,8 +103,17 @@ def main():
     direction = None
 
     while True:
+        # Loop Complete - Sleep for 10 seconds
+        time.sleep(15)
+
         # Get the reading and send to Influx
-        reading = get_reading(config)[0]
+        reading = False
+        try:
+            reading = get_reading(config)[0]
+        except:
+            sense.show_message("Error in reading...")
+            continue
+
         
         for event in sense.stick.get_events():
             direction = event.direction # , event.action
@@ -126,10 +135,6 @@ def main():
                 str(round(reading["fields"]["y"], 2)) + " " +
                 str(round(reading["fields"]["z"], 2)) + " "
             )
-
-
-        # Loop Complete - Sleep for 10 seconds
-        time.sleep(15)
 
 if __name__ == '__main__':
     main()
