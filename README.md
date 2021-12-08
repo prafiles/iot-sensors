@@ -20,7 +20,7 @@ As good reference for Raspberry Pi and DHT11 setup, please see this [doc](http:/
 We will be using a few Libraries that need installed either via `pip`. Run from your Pi to prepare Python.
 
 ```bash
-pip3 install -y requests Adafruit_DHT influxdb
+pip3 install requests Adafruit_DHT influxdb
 ```
 
 For more information about these libraries see their docs:
