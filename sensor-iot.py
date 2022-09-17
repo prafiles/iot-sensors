@@ -92,11 +92,17 @@ def main():
     config = read_config()
 
     while True:
-        # Get the reading and send to Influx
-        current_temperature = get_reading(config)
+
+        try:
+
+            # Get the reading and send to Influx
+            current_temperature = get_reading(config)
+
+        except Exception as e:
+            print(e)
 
         # Loop Complete - Sleep for 10 seconds
-        time.sleep(5)
+        time.sleep(15)
 
 if __name__ == '__main__':
     main()
