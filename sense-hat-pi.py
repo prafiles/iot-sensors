@@ -11,6 +11,7 @@ CONFIG_FILE = "settings.conf"
 sense = SenseHat()
 sense.set_rotation(180)
 sense.show_message("Starting...")
+print("Starting...")
 
 def get_reading(config):
     # InfluxDB connection info
@@ -64,7 +65,7 @@ def get_reading(config):
                 "temperature_c": celcius,
                 "temperature_f": farhenheit,
                 "humidity": humidity,
-                "pressure": pressure,
+                "pressure_v2": pressure,
                 "x": acceleration['x'],
                 "y": acceleration['y'],
                 "z": acceleration['z'],
@@ -110,8 +111,9 @@ def main():
         reading = False
         try:
             reading = get_reading(config)[0]
-        except:
+        except Exception as e:
             sense.show_message("Error in reading...")
+            print (e)
             continue
 
         
@@ -121,7 +123,7 @@ def main():
         if direction == "up":
             sense.show_message(str(round(reading["fields"]["temperature_c"], 2)) + " C "
                 + str(round(reading["fields"]["humidity"], 2)) + " % " +
-                str(round(reading["fields"]["pressure"], 2)) + " mBar"
+                str(round(reading["fields"]["pressure_v2"], 2)) + " mBar"
             )
         elif direction == "down":
             now = datetime.now()
@@ -135,6 +137,7 @@ def main():
                 str(round(reading["fields"]["y"], 2)) + " " +
                 str(round(reading["fields"]["z"], 2)) + " "
             )
+        print("Loop ended success")
 
 if __name__ == '__main__':
     main()
