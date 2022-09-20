@@ -29,7 +29,7 @@ def get_reading(config):
         print ("Humidity is null, possibly an err code.")
         return
     if humidity > 100 or humidity < 0 :
-        print ("Humidity is abnormal, possibly an err code : " +  humidity)
+        print ("Humidity is abnormal, possibly an err code : " + str(humidity))
         return
         
     # Add Farhenheit for us 'Mericans
