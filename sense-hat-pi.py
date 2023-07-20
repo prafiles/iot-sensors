@@ -65,7 +65,7 @@ def get_reading(config):
                 "temperature_c": celcius,
                 "temperature_f": farhenheit,
                 "humidity": humidity,
-                "pressure_v2": pressure,
+                "pressure": pressure,
                 "x": acceleration['x'],
                 "y": acceleration['y'],
                 "z": acceleration['z'],
