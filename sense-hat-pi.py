@@ -26,8 +26,8 @@ def get_reading(config):
     # Create the InfluxDB client object
     client = InfluxDBClient(host, port, user, password, dbname)
 
-    humidity = sense.get_humidity()
-    pressure = sense.get_pressure()
+    humidity = float(sense.get_humidity())
+    pressure = float(sense.get_pressure())
 
     if humidity is None:
         print ("Humidity is null, possibly an err code.")
