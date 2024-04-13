@@ -1,10 +1,14 @@
 import time
+import json
 import configparser
-import Adafruit_DHT
 from influxdb import InfluxDBClient
+import paho.mqtt.client as mqtt
+
+import Adafruit_DHT
 
 # Configuration File
 CONFIG_FILE = "settings.conf"
+client = None
 
 def get_reading(config):
     # InfluxDB connection info
@@ -67,7 +71,7 @@ def get_reading(config):
     # Write it!
     client.write_points(data)
 
-    # Return the temperature value.
+    # Return the payload
     return data
 
 
@@ -90,19 +94,36 @@ def main():
 
     # Read the config
     config = read_config()
+    global client 
+    client = mqtt.Client()
+
+    # Set username and password if MQTT broker requires authentication
+    client.username_pw_set(config['mqtt_settings']['username'], config['mqtt_settings']['password'])
+
+    # Connect to the broker
+    client.connect(config['mqtt_settings']['broker_address'], config['mqtt_settings']['port'])
+
+    
+    
 
     while True:
 
         try:
 
             # Get the reading and send to Influx
-            current_temperature = get_reading(config)
+            data = get_reading(config)
+            payload = json.dumps(data)
+            # Publish the data to the topic
+            client.publish(config['mqtt_settings']['topic'], payload)
 
         except Exception as e:
             print(e)
 
         # Loop Complete - Sleep for 10 seconds
         time.sleep(15)
+
+    # Disconnect from the broker
+    client.disconnect()
 
 if __name__ == '__main__':
     main()
