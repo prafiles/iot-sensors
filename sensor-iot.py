@@ -114,7 +114,9 @@ def main():
             data = get_reading(config)
             payload = json.dumps(data)
             # Publish the data to the topic
-            client.publish(config['mqtt_settings']['topic'], payload)
+            client.publish(config['mqtt_settings']['topic'] + config['sensor_settings']['location'], payload)
+
+            # Publish the reading to the topic
 
         except Exception as e:
             print(e)
