@@ -101,7 +101,7 @@ def main():
     client.username_pw_set(config['mqtt_settings']['username'], config['mqtt_settings']['password'])
 
     # Connect to the broker
-    client.connect(config['mqtt_settings']['broker_address'], config['mqtt_settings']['port'])
+    client.connect(config['mqtt_settings']['broker_address'], int(config['mqtt_settings']['broker_port']))
 
     
     
