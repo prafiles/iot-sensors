@@ -121,8 +121,8 @@ def main():
         # Get the reading and send to Influx
         reading = False
         try:
-            data = get_reading(config)[0]
-            payload = json.dumps(data[0])
+            reading = get_reading(config)[0]
+            payload = json.dumps(reading)
             client.publish(config['mqtt_settings']['topic'] + config['sensor_settings']['location'], payload)
         except Exception as e:
             sense.show_message("Error in reading...")
