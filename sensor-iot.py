@@ -58,12 +58,12 @@ def get_reading(config):
             },
             "time": timestamp,
             "fields": {
-                "temperature_c": celcius,
-                "temperature_f": farhenheit,
-                "humidity": humidity,
-                "dew_point": dew_point,
-                "heat_index_f": heat_index,
-                "heat_index_c": (heat_index - 32) * 5/9 
+                "temperature_c": round(celcius,2),
+                "temperature_f": round(farhenheit,2),
+                "humidity": round(humidity,2),
+                "dew_point": round(dew_point,2),
+                "heat_index_f": round(heat_index,2),
+                "heat_index_c": round((heat_index - 32) * 5/9,2) 
             }
         }
     ]
