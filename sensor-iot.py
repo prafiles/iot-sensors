@@ -112,7 +112,7 @@ def main():
 
             # Get the reading and send to Influx
             data = get_reading(config)
-            payload = json.dumps(data)
+            payload = json.dumps(data[0])
             # Publish the data to the topic
             client.publish(config['mqtt_settings']['topic'] + config['sensor_settings']['location'], payload)
 
