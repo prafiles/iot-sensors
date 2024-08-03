@@ -12,7 +12,7 @@ client = None
 
 #Sense HAT
 sense = SenseHat()
-sense.set_rotation(180)
+sense.set_rotation(90)
 sense.show_message("Starting...")
 print("Starting...")
 
