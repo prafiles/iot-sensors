@@ -1,15 +1,19 @@
 import time
+import json
 import configparser
 from sense_hat import SenseHat
 from influxdb import InfluxDBClient
 from datetime import datetime
+import paho.mqtt.client as mqtt
+import traceback
 
 # Configuration File
 CONFIG_FILE = "settings.conf"
+client = None
 
 #Sense HAT
 sense = SenseHat()
-sense.set_rotation(180)
+sense.set_rotation(90)
 sense.show_message("Starting...")
 print("Starting...")
 
@@ -30,11 +34,11 @@ def get_reading(config):
     pressure = float(sense.get_pressure())
 
     if humidity is None:
-        print ("Humidity is null, possibly an err code.")
-        return
-    if humidity > 100 or humidity < 0 :
-        print ("Humidity is abnormal, possibly an err code : " +  humidity)
-        return
+        print("Humidity is null, possibly an err code.")
+        humidity = -1
+    if humidity > 99:
+        print("Bug in sense-hat. Humidity : " +  str(humidity))
+        humidity = 99.0
 
     celcius = sense.get_temperature()
         
@@ -62,16 +66,16 @@ def get_reading(config):
             },
             "time": timestamp,
             "fields": {
-                "temperature_c": celcius,
-                "temperature_f": farhenheit,
-                "humidity": humidity,
-                "pressure": pressure,
-                "x": acceleration['x'],
-                "y": acceleration['y'],
-                "z": acceleration['z'],
-                "dew_point": dew_point,
-                "heat_index_f": heat_index,
-                "heat_index_c": (heat_index - 32) * 5/9 
+                "temperature_c": round(celcius,2),
+                "temperature_f": round(farhenheit,2),
+                "humidity": round(humidity,2),
+                "pressure": round(pressure,3),
+                "x": round(acceleration['x'],4),
+                "y": round(acceleration['y'],4),
+                "z": round(acceleration['z'],4),
+                "dew_point": round(dew_point,2),
+                "heat_index_f": round(heat_index,2),
+                "heat_index_c": round((heat_index - 32) * 5/9,2)
             }
         }
     ]
@@ -100,6 +104,14 @@ def main():
 
     # Read the config
     config = read_config()
+    global client 
+    client = mqtt.Client()
+
+    # Set username and password if MQTT broker requires authentication
+    client.username_pw_set(config['mqtt_settings']['username'], config['mqtt_settings']['password'])
+
+    # Connect to the broker
+    client.connect(config['mqtt_settings']['broker_address'], int(config['mqtt_settings']['port']))
 
     direction = None
 
@@ -110,10 +122,15 @@ def main():
         # Get the reading and send to Influx
         reading = False
         try:
-            reading = get_reading(config)[0]
+            reading = get_reading(config)
+            if reading is not None:
+                payload = json.dumps(reading[0])
+                client.publish(config['mqtt_settings']['topic'] + config['sensor_settings']['location'], payload)
+            else:
+                print("Reading is none! Something weird is happening.")
         except Exception as e:
             sense.show_message("Error in reading...")
-            print (e)
+            print (traceback.format_exc())
             continue
 
         
@@ -138,6 +155,8 @@ def main():
                 str(round(reading["fields"]["z"], 2)) + " "
             )
         print("Loop ended success")
+    
+    client.disconnect()
 
 if __name__ == '__main__':
     main()
