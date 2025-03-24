@@ -2,7 +2,7 @@ import time
 import json
 import configparser
 from sense_hat import SenseHat
-from influxdb import InfluxDBClient
+# from influxdb import InfluxDBClient
 from datetime import datetime
 import paho.mqtt.client as mqtt
 import traceback
@@ -13,22 +13,22 @@ client = None
 
 #Sense HAT
 sense = SenseHat()
-sense.set_rotation(90)
+sense.set_rotation(0)
 sense.show_message("Starting...")
 print("Starting...")
 
 def get_reading(config):
     # InfluxDB connection info
-    host = config['influxdb_settings']['host']
-    port = config['influxdb_settings']['port']
-    user = config['influxdb_settings']['user']
-    password = config['influxdb_settings']['password']
-    dbname = config['influxdb_settings']['dbname']
+    # host = config['influxdb_settings']['host']
+    # port = config['influxdb_settings']['port']
+    # user = config['influxdb_settings']['user']
+    # password = config['influxdb_settings']['password']
+    # dbname = config['influxdb_settings']['dbname']
     measurement = config['sensor_settings']['measurement']
     location = config['sensor_settings']['location']
 
     # Create the InfluxDB client object
-    client = InfluxDBClient(host, port, user, password, dbname)
+    # client = InfluxDBClient(host, port, user, password, dbname)
 
     humidity = float(sense.get_humidity())
     pressure = float(sense.get_pressure())
@@ -81,7 +81,7 @@ def get_reading(config):
     ]
 
     # Write it!
-    client.write_points(data)
+    # client.write_points(data)
 
     # Return the temperature value.
     return data

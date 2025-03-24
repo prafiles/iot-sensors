@@ -1,10 +1,11 @@
 import time
 import json
 import configparser
-from influxdb import InfluxDBClient
+# from influxdb import InfluxDBClient
 import paho.mqtt.client as mqtt
 
 import Adafruit_DHT
+# from influxdb import InfluxDBClient
 
 # Configuration File
 CONFIG_FILE = "settings.conf"
@@ -12,14 +13,14 @@ client = None
 
 def get_reading(config):
     # InfluxDB connection info
-    host = config['influxdb_settings']['host']
-    port = config['influxdb_settings']['port']
-    user = config['influxdb_settings']['user']
-    password = config['influxdb_settings']['password']
-    dbname = config['influxdb_settings']['dbname']
+    # host = config['influxdb_settings']['host']
+    # port = config['influxdb_settings']['port']
+    # user = config['influxdb_settings']['user']
+    # password = config['influxdb_settings']['password']
+    # dbname = config['influxdb_settings']['dbname']
 
     # Create the InfluxDB client object
-    client = InfluxDBClient(host, port, user, password, dbname)
+    # client = InfluxDBClient(host, port, user, password, dbname)
 
     # Sensor details
     #sensor = str(config['sensor_settings']['sensor'])
@@ -69,7 +70,7 @@ def get_reading(config):
     ]
 
     # Write it!
-    client.write_points(data)
+    # client.write_points(data)
 
     # Return the payload
     return data
